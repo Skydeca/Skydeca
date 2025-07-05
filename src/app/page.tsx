@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { motion, useCycle } from 'framer-motion';
 import Particles from '@tsparticles/react';
 
+import { FolderTree, Text, Search, Users } from 'lucide-react';
+
 const wordCloudTags = [
   'Faith', 'Grace', 'Doubt', 'Hope', 'Science', 'Creativity',
   'Leadership', 'Philosophy', 'Testimony', 'Identity',
@@ -63,9 +65,9 @@ export default function HomePage() {
         >
           Skydeca
         </motion.h1>
-        <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
+        <p className="text-2xl sm:text-3xl text-blue-800 mb-24">Index the Infinite</p>
         <section className="z-10 mt-6 mb-10 text-center px-6">
-          <form className="max-w-sm mx-auto flex flex-col gap-3 text-sm">
+          <form className="max-w-xs mx-auto flex flex-col gap-3 text-sm">
             <input
               type="email"
               placeholder="Email"
@@ -84,9 +86,6 @@ export default function HomePage() {
             </button>
           </form>
         </section>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
-          Start Tagging
-        </button>
       </section>
 
       {/* 🧩 Feature Cards */}
@@ -144,33 +143,40 @@ export default function HomePage() {
 
       {/* 🧠 Preview Grid */}
       <motion.section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-6 mt-24 mb-32 z-10 relative">
-        {[ 
+        {[
           {
+            icon: <FolderTree className="w-6 h-6 text-blue-500" />, 
             title: 'Tag Map Collections',
             description: 'Organize semantic tags into flexible collections that span media files.'
           },
           {
+            icon: <Text className="w-6 h-6 text-blue-500" />, 
             title: 'Transcript-aware Tagging',
             description: 'Precisely map ideas to time-based segments with smart excerpt previews.'
           },
           {
+            icon: <Search className="w-6 h-6 text-blue-500" />, 
             title: 'Global Search Layer',
             description: 'Search across your entire content library with semantic, nonlinear filters.'
           },
           {
+            icon: <Users className="w-6 h-6 text-blue-500" />, 
             title: 'Team Collaboration',
             description: 'Tag together, review changes, and build shared intelligence as a team.'
           }
-        ].map(({ title, description }, i) => (
+        ].map(({ icon, title, description }, i) => (
           <motion.div
             key={i}
-            className="bg-white rounded-xl shadow-md border border-blue-100 p-6"
+            className="bg-white rounded-xl shadow-md border border-blue-100 p-6 flex items-start gap-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: i * 0.1 }}
           >
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-            <p className="text-sm text-gray-600">{description}</p>
+            {icon}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">{title}</h3>
+              <p className="text-sm text-gray-600">{description}</p>
+            </div>
           </motion.div>
         ))}
       </motion.section>
