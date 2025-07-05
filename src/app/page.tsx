@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { motion, useCycle } from 'framer-motion';
@@ -109,10 +110,10 @@ export default function HomePage() {
           variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
         >
           {[
-            { title: 'Smarter Tagging', desc: 'Use AI with human help to tag ideas accurately.' },
-            { title: 'Idea-Based Search', desc: 'Find content by idea, not just timestamps.' },
-            { title: 'Media Unlocked', desc: 'Surface powerful moments from your recordings.' },
-            { title: 'Guided Journeys', desc: 'Create learning paths through connected tags.' },
+            { title: 'Smart Segmentation', desc: 'Accurate media tagging with AI assistance.' },
+            { title: 'Savvy Search', desc: 'Find media by themes and ideas.' },
+            { title: 'Streamlined Segments', desc: 'Easily map your media for quick access.' },
+            { title: 'Seamless Sourcing', desc: 'Effortlessly source and organize your media.' },
           ].map(({ title, desc }, i) => (
             <motion.div
               key={i}
@@ -153,9 +154,9 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-12 h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] relative">
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-40 sm:h-48 md:h-56 lg:h-64 xl:h-[20rem] relative flex justify-center items-center">
           {/* Graph bars */}
-          <div className="h-5 relative flex items-center gap-1">
+          <div className="h-5 relative flex items-center gap-1 w-full">
             {[...Array(12)].map((_, i) => (
               <motion.div
                 key={i}
