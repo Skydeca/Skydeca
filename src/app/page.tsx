@@ -153,14 +153,13 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* 🔁 Transcript Graph With Animated Dividers */}
-        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-4 mt-8 relative">
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-12 h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] relative">
           {/* Graph bars */}
           <div className="h-5 relative flex items-center gap-1">
             {[...Array(12)].map((_, i) => (
               <motion.div
                 key={i}
-                className="h-full rounded bg-blue-300/30"
+                className="h-full rounded bg-blue-300/30 origin-bottom"
                 animate={{
                   scaleY: i % dividerLabels.length === activeDivider ? 1.4 : 1,
                   opacity: i % dividerLabels.length === activeDivider ? 0.7 : 0.4,
@@ -181,7 +180,8 @@ export default function HomePage() {
               </span>
             ))}
           </div>
-          <p className="text-xs text-center text-blue-500 mt-3">Transcript Insight Graph Preview</p>
+          <h4 className="text-sm sm:text-base text-center text-blue-600 font-semibold mb-2">Dynamic Keyword Activity</h4>
+          <p className="text-xs text-center text-blue-500">Transcript Insight Graph Preview</p>
         </div>
 
         {/* Footer */}
