@@ -11,11 +11,14 @@ import { FolderTree, Text, Search, Users } from 'lucide-react';
 const __icons = [FolderTree, Text, Search, Users];
 
 const wordCloudTags = [
-  'Faith', 'Grace', 'Doubt', 'Hope', 'Science', 'Creativity',
-  'Leadership', 'Philosophy', 'Testimony', 'Identity',
-  'Silence', 'Wisdom', 'Breakthrough', 'Narrative',
-  'Culture', 'Design', 'Prayer', 'Meaning', 'Emotion',
-  'Justice', 'Technology', 'Silhouettes', 'Imagination',
+  'Faith', 'Grace', 'Doubt', 'Hope', 'Science', 'Creativity', 'Leadership', 'Philosophy', 'Testimony', 'Identity',
+  'Silence', 'Wisdom', 'Breakthrough', 'Narrative', 'Culture', 'Design', 'Prayer', 'Meaning', 'Emotion',
+  'Justice', 'Technology', 'Silhouettes', 'Imagination', 'Innovation', 'Inspiration', 'Learning', 'Growth', 'Resilience',
+  'Empathy', 'Connection', 'Purpose', 'Reflection', 'Transformation', 'Adaptability', 'Vision', 'Progress', 'Courage',
+  'Impact', 'Clarity', 'Determination', 'Balance', 'Freedom', 'Creativity', 'Collaboration', 'Openness', 'Purpose',
+  'Equity', 'Equality', 'Diversity', 'Sustainability', 'Knowledge', 'Change', 'Truth', 'Reflection', 'Authenticity',
+  'Leadership', 'Trust', 'Potential', 'Mindset', 'Energy', 'Focus', 'Hope', 'Strength', 'Love', 'Unity',
+  'Discovery', 'Innovation', 'Future', 'Wisdom', 'Breakthrough', 'Innovation', 'Empowerment', 'Sustainability'
 ];
 
 const dividerLabels = [
@@ -129,7 +132,7 @@ export default function HomePage() {
         </motion.section>
 
         {/* 🌥 Word Cloud */}
-        <div className="relative h-64 w-full mt-8 overflow-hidden">
+        <div className="relative h-96 w-full mt-8 overflow-hidden">
           {wordCloudTags.map((word, i) => (
             <motion.div
               key={i}
