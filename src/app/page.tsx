@@ -53,43 +53,48 @@ export default function HomePage() {
         transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* 🚀 Hero Section Hybrid */}
-      <section className="relative z-10 mt-36 w-full px-6 flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl">
-        <div className="text-center lg:text-left w-full lg:w-1/2">
-          <motion.h1
-            className="text-6xl sm:text-8xl lg:text-[120px] font-extrabold text-gray-900 tracking-tight mb-6"
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+      {/* 🧾 Account Creation Section */}
+      <section className="z-10 mt-24 mb-10 text-center px-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Create an Account</h2>
+        <form className="max-w-md mx-auto flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border border-blue-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="border border-blue-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
           >
-            Skydeca
-          </motion.h1>
-          <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
-            Start Tagging
+            Sign Up
           </button>
-        </div>
+        </form>
+      </section>
 
-        <div className="w-full">
-          <div className="relative h-96 w-full bg-slate-100 rounded-xl shadow-inner p-4 overflow-hidden">
-            <pre className="text-xs text-gray-700 overflow-auto h-full whitespace-pre-wrap">
-{`fetch('/api/tag-media', {
-  method: 'POST',
-  body: JSON.stringify({
-    fileUrl: 'https://cdn.yoursite.com/episode01.mp3',
-    tags: ['Wisdom', 'Breakthrough']
-  })
-})
-  .then(res => res.json())
-  .then(data => console.log('Success:', data));`}
-            </pre>
-          </div>
-        </div>
+      {/* 🚀 Hero Section Centered */}
+      <section className="relative z-10 text-center mt-12 mb-20 max-w-4xl px-6">
+        <motion.h1
+          className="text-6xl sm:text-8xl font-extrabold text-gray-900 tracking-tight mb-6"
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
+        >
+          Skydeca
+        </motion.h1>
+        <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
+          Start Tagging
+        </button>
       </section>
 
       {/* 🧩 Feature Cards */}
       <motion.section
-        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mt-28 mb-20 max-w-6xl"
+        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mt-10 mb-20 max-w-6xl"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
