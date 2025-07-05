@@ -132,7 +132,7 @@ export default function HomePage() {
         </motion.section>
 
         {/* 🌥 Word Cloud */}
-        <div className="relative h-[40rem] w-full mt-8 overflow-hidden">
+        <div className="relative h-[40rem] w-full overflow-hidden">
           {wordCloudTags.map((word, i) => (
             <motion.div
               key={i}
