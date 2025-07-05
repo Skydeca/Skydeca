@@ -2,8 +2,7 @@
 
 import { motion, useCycle } from 'framer-motion';
 import { useEffect } from 'react';
-import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
+import { Particles } from '@tsparticles/react';
 
 export default function HomePage() {
   const [colorCycle, setColorCycle] = useCycle('bg-blue-100', 'bg-gray-200');
@@ -18,19 +17,25 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col items-center bg-white relative overflow-hidden">
 
-      {/* 🎇 Particle background (tsparticles) */}
+      {/* 🎇 Particle background */}
       <Particles
+        id="tsparticles"
         className="absolute inset-0 z-0"
         options={{
-          background: { color: { value: "#ffffff" } },
+          background: { color: { value: '#ffffff' } },
           fullScreen: { enable: false },
           particles: {
             number: { value: 45 },
             size: { value: 1.5 },
-            color: { value: "#93c5fd" },
+            color: { value: '#93c5fd' },
             move: { enable: true, speed: 0.4 },
             opacity: { value: 0.2 },
-            links: { enable: true, distance: 100, color: "#cbd5e1", opacity: 0.15 },
+            links: {
+              enable: true,
+              distance: 100,
+              color: '#cbd5e1',
+              opacity: 0.15,
+            },
           },
         }}
       />
