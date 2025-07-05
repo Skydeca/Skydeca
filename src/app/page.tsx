@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { motion, useCycle } from 'framer-motion';
@@ -110,10 +109,10 @@ export default function HomePage() {
           variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
         >
           {[
-            { title: 'Sensible Segmentation', desc: 'Effortlessly tag media with semantic accuracy.' },
-            { title: 'Intelligent Indexing', desc: 'Search your media by themes, not just time.' },
-            { title: 'Media Mapping', desc: 'Unlock meaningful moments and segments effortlessly.' },
-            { title: 'Guided Growth', desc: 'Build insightful paths and discover deep connections.' },
+            { title: 'Smarter Tagging', desc: 'Use AI with human help to tag ideas accurately.' },
+            { title: 'Idea-Based Search', desc: 'Find content by idea, not just timestamps.' },
+            { title: 'Media Unlocked', desc: 'Surface powerful moments from your recordings.' },
+            { title: 'Guided Journeys', desc: 'Create learning paths through connected tags.' },
           ].map(({ title, desc }, i) => (
             <motion.div
               key={i}
@@ -154,13 +153,13 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[24rem] relative flex justify-center items-center">
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-12 h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] relative">
           {/* Graph bars */}
-          <div className="h-5 relative flex items-center gap-1 w-full">
+          <div className="h-5 relative flex items-center gap-1">
             {[...Array(12)].map((_, i) => (
               <motion.div
                 key={i}
-                className="h-full rounded bg-blue-300/30 origin-bottom transition-all duration-300 ease-out"
+                className="h-full rounded bg-blue-300/30 origin-bottom"
                 animate={{
                   scaleY: i % dividerLabels.length === activeDivider ? 1.4 : 1,
                   opacity: i % dividerLabels.length === activeDivider ? 0.7 : 0.4,
@@ -176,7 +175,6 @@ export default function HomePage() {
               <span
                 key={label}
                 className={i === activeDivider ? 'text-blue-600 font-semibold scale-110 transition-transform' : ''}
-                style={{ textShadow: i === activeDivider ? '0 0 10px rgba(0, 0, 0, 0.5)' : 'none' }}
               >
                 {label}
               </span>
