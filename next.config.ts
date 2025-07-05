@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+// next.config.ts
+const nextConfig = {
+  // other config options...
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en',
+    localeDetection: false, // 👈 disables automatic redirects
+  },
+}
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+export default nextConfig
