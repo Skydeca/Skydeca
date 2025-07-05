@@ -24,7 +24,6 @@ export default function HomePage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center bg-white font-sora overflow-hidden">
-
       {/* 🎇 Particle Background */}
       <Particles
         id="tsparticles"
@@ -56,17 +55,10 @@ export default function HomePage() {
       />
 
       {/* 🚀 Hero Section Centered */}
-      <section className="relative z-10 text-center mt-24 mb-10 max-w-4xl px-6">
-        <motion.h1
-          className="text-6xl sm:text-8xl font-extrabold text-gray-900 tracking-tight mb-6"
-          initial={{ opacity: 0, y: 80 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
-        >
-          Skydeca
-        </motion.h1>
-        <p className="text-2xl sm:text-3xl text-blue-800 mb-24">Index the Infinite</p>
-        <section className="z-10 mt-6 mb-10 text-center px-6">
+      <section className="relative z-10 text-center mt-24 mb-6 max-w-4xl px-6">
+        <h1 className="text-6xl sm:text-8xl font-extrabold text-gray-900 tracking-tight mb-4">Skydeca</h1>
+        <p className="text-2xl sm:text-3xl text-blue-800 mb-16">Index the Infinite</p>
+        <section className="z-10 mb-10 text-center px-6">
           <form className="max-w-xs mx-auto flex flex-col gap-3 text-sm">
             <input
               type="email"
@@ -90,17 +82,17 @@ export default function HomePage() {
 
       {/* 🧩 Feature Cards */}
       <motion.section
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 px-6 sm:px-12 z-10 mt-10 mb-20 max-w-4xl"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 px-6 sm:px-12 z-10 mt-8 mb-20 max-w-4xl"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
       >
         {[
-          { title: 'Tag Smarter', desc: 'Hybrid AI + human labeling for deep contextual intelligence.' },
-          { title: 'Navigate Freely', desc: 'Jump across ideas—not just timestamps—with nonlinear search.' },
-          { title: 'Unlock Media', desc: 'Reveal buried insights with modular, semantic retrieval.' },
-          { title: 'Curated Experiences', desc: 'Deliver personalized knowledge journeys with intelligent tag flows.' },
+          { title: 'Smarter Tagging', desc: 'Use AI with human help to tag ideas accurately.' },
+          { title: 'Idea-Based Search', desc: 'Find content by idea, not just timestamps.' },
+          { title: 'Media Unlocked', desc: 'Surface powerful moments from your recordings.' },
+          { title: 'Guided Journeys', desc: 'Create learning paths through connected tags.' },
         ].map(({ title, desc }, i) => (
           <motion.div
             key={i}
@@ -116,7 +108,7 @@ export default function HomePage() {
       </motion.section>
 
       {/* 🌥 Word Cloud */}
-      <div className="relative h-64 w-full mt-12 overflow-hidden">
+      <div className="relative h-64 w-full mt-8 overflow-hidden">
         {wordCloudTags.map((word, i) => (
           <motion.div
             key={i}
@@ -142,27 +134,27 @@ export default function HomePage() {
       </div>
 
       {/* 🧠 Preview Grid */}
-      <motion.section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-6 mt-24 mb-32 z-10 relative">
+      <motion.section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-6 mt-20 mb-28 z-10 relative">
         {[
           {
             icon: <FolderTree className="w-6 h-6 text-blue-500" />, 
             title: 'Tag Map Collections',
-            description: 'Organize semantic tags into flexible collections that span media files.'
+            description: 'Group related tags into collections that connect different files.'
           },
           {
             icon: <Text className="w-6 h-6 text-blue-500" />, 
-            title: 'Transcript-aware Tagging',
-            description: 'Precisely map ideas to time-based segments with smart excerpt previews.'
+            title: 'Smart Transcripts',
+            description: 'Tag quotes and moments straight from the transcript.'
           },
           {
             icon: <Search className="w-6 h-6 text-blue-500" />, 
-            title: 'Global Search Layer',
-            description: 'Search across your entire content library with semantic, nonlinear filters.'
+            title: 'Powerful Search',
+            description: 'Find clips by meaning, not just keywords.'
           },
           {
             icon: <Users className="w-6 h-6 text-blue-500" />, 
-            title: 'Team Collaboration',
-            description: 'Tag together, review changes, and build shared intelligence as a team.'
+            title: 'Collaborate Easily',
+            description: 'Work with your team to build shared insight.'
           }
         ].map(({ icon, title, description }, i) => (
           <motion.div
@@ -188,7 +180,7 @@ export default function HomePage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
       >
-        Built with love. Searching for meaning — one tag at a time.
+        Built with care. Helping ideas speak — one tag at a time.
       </motion.footer>
     </main>
   );
