@@ -132,7 +132,7 @@ export default function HomePage() {
         </motion.section>
 
         {/* 🌥 Word Cloud */}
-        <div className="relative h-[40rem] w-full mt-8 overflow-hidden">
+        <div className="relative h-[60rem] w-full overflow-hidden">
           {wordCloudTags.map((word, i) => (
             <motion.div
               key={i}
@@ -140,8 +140,8 @@ export default function HomePage() {
               initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
               animate={{
                 opacity: 0.3 + Math.random() * 0.6,
-                x: Math.random() * 400 - 200,
-                y: Math.random() * 300 - 150,
+                x: Math.random() * 800 - 400,
+                y: Math.random() * 600 - 300,
                 scale: 0.8 + Math.random() * 1.5,
               }}
               transition={{
@@ -157,7 +157,7 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-24 sm:h-32 md:h-40 lg:h-48 xl:h-[12rem] relative flex justify-center items-center">
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-20 sm:h-24 md:h-32 lg:h-40 xl:h-[10rem] relative flex justify-center items-center">
           {/* Graph bars */}
           <div className="h-5 relative flex items-center gap-1 w-full">
             {[...Array(12)].map((_, i) => (
