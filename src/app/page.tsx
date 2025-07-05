@@ -189,7 +189,7 @@ export default function HomePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          Built with care. Helping ideas speak — one tag at a time.
+          Built with passion. One tag at a time.
         </motion.footer>
       </main>
     </>
