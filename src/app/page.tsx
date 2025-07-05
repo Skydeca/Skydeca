@@ -12,7 +12,7 @@ export default function HomePage() {
           href="#"
           className="inline-block bg-white text-black font-semibold py-3 px-6 rounded-full hover:bg-gray-200 transition"
         >
-          Explore What's Coming
+          Explore What&apos;s Coming
         </a>
       </div>
     </main>
