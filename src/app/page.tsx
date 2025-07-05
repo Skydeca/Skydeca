@@ -57,7 +57,7 @@ export default function HomePage() {
       {/* 🚀 Hero Section Centered */}
       <section className="relative z-10 text-center mt-24 mb-6 max-w-4xl px-6">
         <h1 className="text-6xl sm:text-8xl font-extrabold text-gray-900 tracking-tight mb-4">Skydeca</h1>
-        <p className="text-2xl sm:text-3xl text-blue-800 mb-16">Index the Infinite</p>
+        <p className="text-2xl sm:text-3xl text-blue-800 mb-20">Index the Infinite</p>
         <section className="z-10 mb-10 text-center px-6">
           <form className="max-w-xs mx-auto flex flex-col gap-3 text-sm">
             <input
@@ -82,7 +82,7 @@ export default function HomePage() {
 
       {/* 🧩 Feature Cards */}
       <motion.section
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 px-6 sm:px-12 z-10 mt-8 mb-20 max-w-4xl"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 px-6 sm:px-12 z-10 mt-6 mb-16 max-w-4xl"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -133,30 +133,25 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* 🧠 Preview Grid */}
+      {/* 🧠 Preview Grid + Transcript Graph */}
       <motion.section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-6 mt-20 mb-28 z-10 relative">
-        {[
-          {
-            icon: <FolderTree className="w-6 h-6 text-blue-500" />, 
-            title: 'Tag Map Collections',
-            description: 'Group related tags into collections that connect different files.'
-          },
-          {
-            icon: <Text className="w-6 h-6 text-blue-500" />, 
-            title: 'Smart Transcripts',
-            description: 'Tag quotes and moments straight from the transcript.'
-          },
-          {
-            icon: <Search className="w-6 h-6 text-blue-500" />, 
-            title: 'Powerful Search',
-            description: 'Find clips by meaning, not just keywords.'
-          },
-          {
-            icon: <Users className="w-6 h-6 text-blue-500" />, 
-            title: 'Collaborate Easily',
-            description: 'Work with your team to build shared insight.'
-          }
-        ].map(({ icon, title, description }, i) => (
+        {[{
+          icon: <FolderTree className="w-6 h-6 text-blue-500" />, 
+          title: 'Tag Map Collections',
+          description: 'Group related tags into collections that connect different files.'
+        }, {
+          icon: <Text className="w-6 h-6 text-blue-500" />, 
+          title: 'Smart Transcripts',
+          description: 'Tag quotes and moments straight from the transcript.'
+        }, {
+          icon: <Search className="w-6 h-6 text-blue-500" />, 
+          title: 'Powerful Search',
+          description: 'Find clips by meaning, not just keywords.'
+        }, {
+          icon: <Users className="w-6 h-6 text-blue-500" />, 
+          title: 'Collaborate Easily',
+          description: 'Work with your team to build shared insight.'
+        }].map(({ icon, title, description }, i) => (
           <motion.div
             key={i}
             className="bg-white rounded-xl shadow-md border border-blue-100 p-6 flex items-start gap-4"
@@ -171,6 +166,20 @@ export default function HomePage() {
             </div>
           </motion.div>
         ))}
+
+        {/* 🔁 Transcript Graph Visually Restored */}
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-4 mt-8">
+          <div className="h-5 relative flex items-center gap-1 animate-pulse">
+            {[...Array(12)].map((_, i) => (
+              <div
+                key={i}
+                className="h-full rounded bg-blue-300/30"
+                style={{ width: `${4 + Math.random() * 10}%`, opacity: 0.4 + Math.random() * 0.4 }}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-center text-blue-500 mt-2">Transcript Insight Graph Preview</p>
+        </div>
       </motion.section>
 
       {/* Footer */}
