@@ -65,22 +65,22 @@ export default function HomePage() {
         </motion.h1>
         <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
         <section className="z-10 mt-6 mb-10 text-center px-6">
-          <form className="max-w-md mx-auto flex flex-col gap-4">
+          <form className="max-w-sm mx-auto flex flex-col gap-3 text-sm">
             <input
               type="email"
               placeholder="Email"
-              className="border border-blue-200 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-blue-200 rounded-md px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
               type="password"
               placeholder="Password"
-              className="border border-blue-200 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-blue-200 rounded-md px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-semibold shadow-md transition"
             >
-              Sign Up
+              Start Tagging
             </button>
           </form>
         </section>
@@ -91,7 +91,7 @@ export default function HomePage() {
 
       {/* 🧩 Feature Cards */}
       <motion.section
-        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mt-10 mb-20 max-w-6xl"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 px-6 sm:px-12 z-10 mt-10 mb-20 max-w-4xl"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -101,6 +101,7 @@ export default function HomePage() {
           { title: 'Tag Smarter', desc: 'Hybrid AI + human labeling for deep contextual intelligence.' },
           { title: 'Navigate Freely', desc: 'Jump across ideas—not just timestamps—with nonlinear search.' },
           { title: 'Unlock Media', desc: 'Reveal buried insights with modular, semantic retrieval.' },
+          { title: 'Curated Experiences', desc: 'Deliver personalized knowledge journeys with intelligent tag flows.' },
         ].map(({ title, desc }, i) => (
           <motion.div
             key={i}
