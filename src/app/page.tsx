@@ -53,31 +53,8 @@ export default function HomePage() {
         transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* 🧾 Account Creation Section */}
-      <section className="z-10 mt-24 mb-10 text-center px-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Create an Account</h2>
-        <form className="max-w-md mx-auto flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="border border-blue-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="border border-blue-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
-          >
-            Sign Up
-          </button>
-        </form>
-      </section>
-
       {/* 🚀 Hero Section Centered */}
-      <section className="relative z-10 text-center mt-12 mb-20 max-w-4xl px-6">
+      <section className="relative z-10 text-center mt-24 mb-10 max-w-4xl px-6">
         <motion.h1
           className="text-6xl sm:text-8xl font-extrabold text-gray-900 tracking-tight mb-6"
           initial={{ opacity: 0, y: 80 }}
@@ -87,6 +64,26 @@ export default function HomePage() {
           Skydeca
         </motion.h1>
         <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
+        <section className="z-10 mt-6 mb-10 text-center px-6">
+          <form className="max-w-md mx-auto flex flex-col gap-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="border border-blue-200 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              className="border border-blue-200 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
+            >
+              Sign Up
+            </button>
+          </form>
+        </section>
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
           Start Tagging
         </button>
@@ -144,44 +141,37 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* 🧠 Media Intelligence Preview */}
-      <motion.section
-        className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 mt-24 mb-32 z-10 relative border border-blue-100"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2 }}
-      >
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Media Intelligence Preview</h3>
-
-        <div className="relative h-20 bg-slate-100 rounded-md overflow-hidden mb-6 border border-blue-50 flex items-center animate-pulse">
-          {[...Array(4)].map((_, i) => {
-            const left = 20 + i * 20;
-            const width = 6 + Math.random() * 6;
-            const opacity = 0.3 + Math.random() * 0.3;
-            return (
-              <div
-                key={i}
-                className="absolute top-0 h-full rounded bg-blue-300/20"
-                style={{ left: `${left}%`, width: `${width}%`, opacity }}
-              />
-            );
-          })}
-          <div className="absolute w-full h-full flex justify-center items-center pointer-events-none text-blue-300 text-xs">
-            Transcript-aware tagging preview
-          </div>
-        </div>
-
-        <div className="flex gap-2 flex-wrap justify-center mb-6">
-          {['Theology', 'Conflict', 'Breakthrough', 'Quotes', 'Wisdom', 'Philosophy'].map((tag) => (
-            <motion.div
-              key={tag}
-              whileHover={{ scale: 1.08, rotate: 1 }}
-              className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full font-medium shadow-sm cursor-pointer transition"
-            >
-              {tag}
-            </motion.div>
-          ))}
-        </div>
+      {/* 🧠 Preview Grid */}
+      <motion.section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-6 mt-24 mb-32 z-10 relative">
+        {[ 
+          {
+            title: 'Tag Map Collections',
+            description: 'Organize semantic tags into flexible collections that span media files.'
+          },
+          {
+            title: 'Transcript-aware Tagging',
+            description: 'Precisely map ideas to time-based segments with smart excerpt previews.'
+          },
+          {
+            title: 'Global Search Layer',
+            description: 'Search across your entire content library with semantic, nonlinear filters.'
+          },
+          {
+            title: 'Team Collaboration',
+            description: 'Tag together, review changes, and build shared intelligence as a team.'
+          }
+        ].map(({ title, description }, i) => (
+          <motion.div
+            key={i}
+            className="bg-white rounded-xl shadow-md border border-blue-100 p-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: i * 0.1 }}
+          >
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
+            <p className="text-sm text-gray-600">{description}</p>
+          </motion.div>
+        ))}
       </motion.section>
 
       {/* Footer */}
