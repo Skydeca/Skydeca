@@ -87,9 +87,9 @@ export default function HomePage() {
         </p>
       </motion.div>
 
-      {/* 🟦 Feature Cards */}
+      {/* 🧩 Cool Feature Cards */}
       <motion.section
-        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mb-28 max-w-6xl animate-fade-up"
+        className="grid sm:grid-cols-3 gap-8 px-6 sm:px-12 z-10 mb-28 max-w-6xl animate-fade-up"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -98,15 +98,37 @@ export default function HomePage() {
           hidden: {},
         }}
       >
-        {['Tag Smarter', 'Navigate Freely', 'Unlock Media'].map((text, i) => (
+        {[
+          {
+            title: 'Tag Smarter',
+            desc: 'Hybrid AI + human labeling for deep contextual intelligence.',
+            icon: '🧠',
+          },
+          {
+            title: 'Navigate Freely',
+            desc: 'Jump across ideas—not just timestamps—with nonlinear search.',
+            icon: '🧭',
+          },
+          {
+            title: 'Unlock Media',
+            desc: 'Reveal buried insights with modular, semantic retrieval.',
+            icon: '🔓',
+          },
+        ].map(({ title, desc, icon }, i) => (
           <motion.div
             key={i}
-            className="bg-white/40 backdrop-blur-lg border border-indigo-100 rounded-2xl px-6 py-8 text-center shadow-xl hover:shadow-indigo-300 transition-shadow"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            className="relative bg-gradient-to-br from-white/30 to-indigo-50 backdrop-blur-lg border border-indigo-100 rounded-3xl p-6 text-left shadow-xl hover:shadow-indigo-300 transition-shadow cursor-pointer group overflow-hidden"
+            whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
           >
-            <h3 className="text-xl font-semibold text-gray-800">{text}</h3>
+            <div className="absolute -top-20 -left-20 w-64 h-64 bg-indigo-200 opacity-10 blur-2xl rounded-full pointer-events-none group-hover:opacity-20 transition-opacity duration-500" />
+            <div className="text-4xl mb-3">{icon}</div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
+            <p className="text-sm text-gray-600 leading-snug">{desc}</p>
+            <motion.div
+              className="h-[2px] bg-indigo-300 mt-4 w-0 group-hover:w-full origin-left transition-all"
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
+            />
           </motion.div>
         ))}
       </motion.section>
