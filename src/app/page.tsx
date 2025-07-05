@@ -4,6 +4,23 @@ import { motion, useCycle } from 'framer-motion';
 import { useEffect } from 'react';
 import { Particles } from '@tsparticles/react';
 
+const wordCloudTags = [
+  'Faith',
+  'Grace',
+  'Doubt',
+  'Hope',
+  'Science',
+  'Creativity',
+  'Leadership',
+  'Philosophy',
+  'Testimony',
+  'Identity',
+  'Silence',
+  'Wisdom',
+  'Breakthrough',
+  'Narrative',
+];
+
 export default function HomePage() {
   const [colorCycle, setColorCycle] = useCycle('bg-indigo-100', 'bg-sky-200');
 
@@ -94,9 +111,9 @@ export default function HomePage() {
         ))}
       </motion.section>
 
-      {/* 🧠 Interactive Tag Strip */}
+      {/* 🧠 Media Intelligence Preview */}
       <motion.section
-        className="max-w-2xl mx-auto bg-white rounded-xl shadow-2xl p-6 mb-36 z-10 relative animate-fade-up border border-blue-100"
+        className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-6 mb-36 z-10 relative animate-fade-up border border-blue-100"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2 }}
@@ -106,14 +123,25 @@ export default function HomePage() {
         </h3>
 
         {/* Segment Strip */}
-        <div className="relative h-24 bg-slate-100 rounded-md overflow-hidden mb-6 border border-blue-50">
-          <div className="absolute top-0 left-1/6 w-14 h-full bg-blue-300 opacity-20" />
-          <div className="absolute top-0 left-1/2 w-10 h-full bg-blue-500 opacity-25" />
-          <div className="absolute top-0 left-3/4 w-12 h-full bg-indigo-400 opacity-20" />
+        <div className="relative h-24 bg-slate-100 rounded-md overflow-hidden mb-6 border border-blue-50 flex items-center">
+          {[20, 40, 60, 80].map((percent, i) => (
+            <div
+              key={i}
+              className="absolute top-0 h-full rounded bg-indigo-300/20"
+              style={{
+                left: `${percent}%`,
+                width: `${Math.random() * 6 + 6}%`,
+                opacity: 0.3 + Math.random() * 0.3,
+              }}
+            />
+          ))}
+          <div className="absolute w-full h-full flex justify-center items-center pointer-events-none text-indigo-300 text-xs">
+            Transcript-aware tagging preview
+          </div>
         </div>
 
-        {/* Animated Tags */}
-        <div className="flex gap-3 flex-wrap justify-center">
+        {/* Animated Tag Tiles */}
+        <div className="flex gap-3 flex-wrap justify-center mb-6">
           {['Theology', 'Conflict', 'Breakthrough', 'Quotes', 'Wisdom', 'Philosophy'].map((tag) => (
             <motion.div
               key={tag}
@@ -124,9 +152,39 @@ export default function HomePage() {
             </motion.div>
           ))}
         </div>
+
+        {/* 🌥 Word Cloud */}
+        <div className="relative h-72 overflow-hidden">
+          {wordCloudTags.map((word, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-xs sm:text-sm font-medium text-indigo-500"
+              initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
+              animate={{
+                opacity: 0.3 + Math.random() * 0.7,
+                x: Math.random() * 300 - 150,
+                y: Math.random() * 250 - 125,
+                scale: 0.7 + Math.random() * 1.2,
+              }}
+              transition={{
+                duration: 4,
+                delay: Math.random() * 2,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+              style={{
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              {word}
+            </motion.div>
+          ))}
+        </div>
       </motion.section>
 
-      {/* 🚀 Footer Suggestion (Optional) */}
+      {/* 🚀 Footer */}
       <motion.footer
         className="mb-10 text-xs text-gray-400 z-10"
         initial={{ opacity: 0 }}
