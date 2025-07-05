@@ -22,7 +22,7 @@ export default function HomePage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center bg-white font-sora overflow-hidden">
-      
+
       {/* 🎇 Particle Background */}
       <Particles
         id="tsparticles"
@@ -53,20 +53,43 @@ export default function HomePage() {
         transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* 🚀 Hero Section */}
-      <motion.div
-        className="text-center relative z-10 mt-44 mb-20"
-        initial={{ opacity: 0, y: 80 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
-      >
-        <h1 className="text-6xl sm:text-7xl font-extrabold text-gray-900 tracking-tight mb-4">Skydeca</h1>
-        <p className="text-xl sm:text-2xl text-indigo-700">Index the Infinite</p>
-      </motion.div>
+      {/* 🚀 Hero Section Hybrid */}
+      <section className="relative z-10 mt-36 w-full px-6 flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl">
+        <div className="text-center lg:text-left w-full lg:w-1/2">
+          <motion.h1
+            className="text-6xl sm:text-8xl lg:text-[120px] font-extrabold text-gray-900 tracking-tight mb-6"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+          >
+            Skydeca
+          </motion.h1>
+          <p className="text-2xl sm:text-3xl text-indigo-700 mb-6">Index the Infinite</p>
+          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
+            Start Tagging
+          </button>
+        </div>
+
+        <div className="hidden lg:block w-full lg:w-1/2">
+          <div className="relative h-96 w-full bg-slate-100 rounded-xl shadow-inner p-4 overflow-hidden">
+            <pre className="text-xs text-gray-700 overflow-auto h-full whitespace-pre-wrap">
+{`fetch('/api/tag-media', {
+  method: 'POST',
+  body: JSON.stringify({
+    fileUrl: 'https://cdn.yoursite.com/episode01.mp3',
+    tags: ['Wisdom', 'Breakthrough']
+  })
+})
+  .then(res => res.json())
+  .then(data => console.log('Success:', data));`}
+            </pre>
+          </div>
+        </div>
+      </section>
 
       {/* 🧩 Feature Cards */}
       <motion.section
-        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mb-20 max-w-6xl"
+        className="grid sm:grid-cols-3 gap-6 px-6 sm:px-12 z-10 mt-28 mb-20 max-w-6xl"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -90,16 +113,41 @@ export default function HomePage() {
         ))}
       </motion.section>
 
+      {/* 🌥 Word Cloud */}
+      <div className="relative h-64 w-full mt-12 overflow-hidden">
+        {wordCloudTags.map((word, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-xs sm:text-sm font-medium text-indigo-500"
+            initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
+            animate={{
+              opacity: 0.3 + Math.random() * 0.6,
+              x: Math.random() * 240 - 120,
+              y: Math.random() * 180 - 90,
+              scale: 0.8 + Math.random() * 1.1,
+            }}
+            transition={{
+              duration: 5,
+              delay: Math.random() * 2,
+              repeat: Infinity,
+              repeatType: 'reverse',
+            }}
+            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          >
+            {word}
+          </motion.div>
+        ))}
+      </div>
+
       {/* 🧠 Media Intelligence Preview */}
       <motion.section
-        className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 mb-32 z-10 relative border border-blue-100"
+        className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 mt-24 mb-32 z-10 relative border border-blue-100"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2 }}
       >
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Media Intelligence Preview</h3>
 
-        {/* Segment Strip */}
         <div className="relative h-20 bg-slate-100 rounded-md overflow-hidden mb-6 border border-blue-50 flex items-center animate-pulse">
           {[...Array(4)].map((_, i) => {
             const left = 20 + i * 20;
@@ -118,7 +166,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Suggested Tags */}
         <div className="flex gap-2 flex-wrap justify-center mb-6">
           {['Theology', 'Conflict', 'Breakthrough', 'Quotes', 'Wisdom', 'Philosophy'].map((tag) => (
             <motion.div
@@ -130,45 +177,6 @@ export default function HomePage() {
             </motion.div>
           ))}
         </div>
-
-        {/* 🌥 Animated Word Cloud */}
-        <div className="relative h-64 overflow-hidden">
-          {wordCloudTags.map((word, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-xs sm:text-sm font-medium text-indigo-500"
-              initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
-              animate={{
-                opacity: 0.3 + Math.random() * 0.6,
-                x: Math.random() * 240 - 120,
-                y: Math.random() * 180 - 90,
-                scale: 0.8 + Math.random() * 1.1,
-              }}
-              transition={{
-                duration: 5,
-                delay: Math.random() * 2,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
-              style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
-            >
-              {word}
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* 🚀 CTA */}
-      <motion.section
-        className="z-10 text-center mb-24 px-6"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Ready to explore your media?</h2>
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition">
-          Start Tagging
-        </button>
       </motion.section>
 
       {/* Footer */}
