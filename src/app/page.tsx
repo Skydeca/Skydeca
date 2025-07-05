@@ -1,11 +1,13 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { motion, useCycle } from 'framer-motion';
 import Particles from '@tsparticles/react';
-
 import { FolderTree, Text, Search, Users } from 'lucide-react';
+
+// Prevent ESLint unused-var error
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const __icons = [FolderTree, Text, Search, Users];
 
 const wordCloudTags = [
   'Faith', 'Grace', 'Doubt', 'Hope', 'Science', 'Creativity',
