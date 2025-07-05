@@ -13,7 +13,7 @@ const wordCloudTags = [
 ];
 
 export default function HomePage() {
-  const [colorCycle, setColorCycle] = useCycle('bg-indigo-100', 'bg-sky-200');
+  const [colorCycle, setColorCycle] = useCycle('bg-blue-100', 'bg-sky-200');
 
   useEffect(() => {
     const interval = setInterval(() => setColorCycle(), 10000);
@@ -64,8 +64,8 @@ export default function HomePage() {
           >
             Skydeca
           </motion.h1>
-          <p className="text-2xl sm:text-3xl text-indigo-700 mb-6">Index the Infinite</p>
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
+          <p className="text-2xl sm:text-3xl text-blue-800 mb-6">Index the Infinite</p>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition">
             Start Tagging
           </button>
         </div>
@@ -102,13 +102,13 @@ export default function HomePage() {
         ].map(({ title, desc }, i) => (
           <motion.div
             key={i}
-            className="relative bg-white/60 border border-indigo-100 rounded-2xl p-5 text-left shadow hover:shadow-md transition-shadow backdrop-blur-md group"
+            className="relative bg-white/60 border border-blue-100 rounded-2xl p-5 text-left shadow hover:shadow-md transition-shadow backdrop-blur-md group"
             whileHover={{ scale: 1.015 }}
             transition={{ type: 'spring', stiffness: 180, damping: 14 }}
           >
             <h3 className="text-lg font-semibold text-gray-800 mb-1">{title}</h3>
             <p className="text-sm text-gray-600 leading-snug">{desc}</p>
-            <div className="h-[1px] bg-indigo-300 mt-3 w-0 group-hover:w-full origin-left transition-all duration-500" />
+            <div className="h-[1px] bg-blue-300 mt-3 w-0 group-hover:w-full origin-left transition-all duration-500" />
           </motion.div>
         ))}
       </motion.section>
@@ -118,7 +118,7 @@ export default function HomePage() {
         {wordCloudTags.map((word, i) => (
           <motion.div
             key={i}
-            className="absolute text-xs sm:text-sm font-medium text-indigo-500"
+            className="absolute text-xs sm:text-sm font-medium text-blue-500"
             initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
             animate={{
               opacity: 0.3 + Math.random() * 0.6,
