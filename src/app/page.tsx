@@ -154,7 +154,7 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-40 sm:h-48 md:h-56 lg:h-64 xl:h-[20rem] relative flex justify-center items-center">
+        <div className="col-span-full bg-slate-100 border border-blue-200 rounded-lg p-6 sm:p-8 mt-8 mb-8 sm:mb-12 h-24 sm:h-32 md:h-40 lg:h-48 xl:h-[12rem] relative flex justify-center items-center">
           {/* Graph bars */}
           <div className="h-5 relative flex items-center gap-1 w-full">
             {[...Array(12)].map((_, i) => (
@@ -163,7 +163,7 @@ export default function HomePage() {
                 className="h-full rounded bg-blue-300/30 origin-bottom"
                 animate={{
                   scaleY: i % dividerLabels.length === activeDivider ? 1.4 : 1,
-                  opacity: i % dividerLabels.length === activeDivider ? 0.7 : 0.4,
+                  opacity: i % dividerLabels.length === activeDivider ? 1 : 0.4,
                 }}
                 transition={{ duration: 0.5 }}
                 style={{ width: `${4 + Math.random() * 10}%` }}
@@ -171,11 +171,12 @@ export default function HomePage() {
             ))}
           </div>
           {/* Divider labels */}
-          <div className="absolute -top-4 left-2 right-2 flex justify-between text-[10px] text-gray-400 font-medium px-1">
+          <div className="absolute -top-6 left-0 right-0 flex justify-between text-[8px] text-gray-500 font-semibold px-2">
             {dividerLabels.map((label, i) => (
               <span
                 key={label}
                 className={i === activeDivider ? 'text-blue-600 font-semibold scale-110 transition-transform' : ''}
+                style={{ textShadow: i === activeDivider ? '0 0 10px rgba(0, 0, 0, 0.5)' : 'none' }}
               >
                 {label}
               </span>
