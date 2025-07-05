@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { motion, useCycle } from 'framer-motion';
 import Particles from '@tsparticles/react';
 
