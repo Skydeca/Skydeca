@@ -132,7 +132,7 @@ export default function HomePage() {
         </motion.section>
 
         {/* 🌥 Word Cloud */}
-        <div className="relative h-96 w-full mt-8 overflow-hidden">
+        <div className="relative h-[40rem] w-full mt-8 overflow-hidden">
           {wordCloudTags.map((word, i) => (
             <motion.div
               key={i}
@@ -140,9 +140,9 @@ export default function HomePage() {
               initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
               animate={{
                 opacity: 0.3 + Math.random() * 0.6,
-                x: Math.random() * 240 - 120,
-                y: Math.random() * 180 - 90,
-                scale: 0.8 + Math.random() * 1.1,
+                x: Math.random() * 400 - 200,
+                y: Math.random() * 300 - 150,
+                scale: 0.8 + Math.random() * 1.5,
               }}
               transition={{
                 duration: 5,
