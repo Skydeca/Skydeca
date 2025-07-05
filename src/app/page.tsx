@@ -70,7 +70,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        <div className="hidden lg:block w-full lg:w-1/2">
+        <div className="w-full">
           <div className="relative h-96 w-full bg-slate-100 rounded-xl shadow-inner p-4 overflow-hidden">
             <pre className="text-xs text-gray-700 overflow-auto h-full whitespace-pre-wrap">
 {`fetch('/api/tag-media', {
@@ -156,12 +156,12 @@ export default function HomePage() {
             return (
               <div
                 key={i}
-                className="absolute top-0 h-full rounded bg-indigo-300/20"
+                className="absolute top-0 h-full rounded bg-blue-300/20"
                 style={{ left: `${left}%`, width: `${width}%`, opacity }}
               />
             );
           })}
-          <div className="absolute w-full h-full flex justify-center items-center pointer-events-none text-indigo-300 text-xs">
+          <div className="absolute w-full h-full flex justify-center items-center pointer-events-none text-blue-300 text-xs">
             Transcript-aware tagging preview
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function HomePage() {
             <motion.div
               key={tag}
               whileHover={{ scale: 1.08, rotate: 1 }}
-              className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full font-medium shadow-sm cursor-pointer transition"
+              className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full font-medium shadow-sm cursor-pointer transition"
             >
               {tag}
             </motion.div>
