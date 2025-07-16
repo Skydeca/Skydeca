@@ -1,13 +1,14 @@
 'use client';
 export const dynamic = 'force-dynamic';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
   const [email, setEmail] = useState('');
   const router = useRouter();
 
