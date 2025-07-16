@@ -1,15 +1,10 @@
 'use client';
 export const dynamic = 'force-dynamic';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { supabase } from '@/lib/supabase';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import WaveSurfer from 'wavesurfer.js';
-import { MediaUploadPage } from '@/components/MediaUploadPage';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+import { MediaUploadPage } from '@/components/MediaUploadPage';
 
 export default function UploadPage() {
   const router = useRouter();
