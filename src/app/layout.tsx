@@ -1,27 +1,15 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Sora } from "next/font/google"; // ✅ Add this line
-import "./globals.css";
+// src/app/layout.tsx
+import "../globals.css";
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"], // ✅ Add relevant weights
-});
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "Skydeca",
-  description: "Your mission. Your media. Your meaning. Built in the cloud.",
+  description: "TagDive | Search by meaning, not minutes",
 };
 
 export default function RootLayout({
@@ -30,11 +18,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${sora.variable}`} // ✅ Add sora
-    >
-      <body>{children}</body>
+    <html lang="en" className="bg-white text-neutral-900">
+      <body
+        className={cn(
+          "min-h-screen font-sans antialiased",
+          inter.className
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={true}>
+          <main className="flex min-h-screen flex-col items-center px-4">
+            <div className="w-full max-w-screen-xl">
+              {children}
+            </div>
+          </main>
+          <Toaster />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
