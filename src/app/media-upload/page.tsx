@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { createBrowserClient } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 export default function MediaUploadPage() {
+  const supabase = createBrowserClient();
+
   const [file, setFile] = useState<File | null>(null);
   const [externalUrl, setExternalUrl] = useState('');
   const [mode, setMode] = useState<'upload' | 'link'>('upload');
@@ -25,16 +27,6 @@ export default function MediaUploadPage() {
       return;
     }
 
-    const filePath = `uploads/${Date.now()}-${file.name}`;
-
-    const { error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
-
-    if (uploadError) {
-      setError('Upload failed: ' + uploadError.message);
-      setLoading(false);
-      return;
-    }
-
     const {
       data: { user },
       error: userError,
@@ -42,6 +34,21 @@ export default function MediaUploadPage() {
 
     if (!user || userError) {
       setError('Auth error: user not found');
+      setLoading(false);
+      return;
+    }
+
+    // Ensure user exists in users table
+    await supabase.from('users').upsert({
+      id: user.id,
+      email: user.email,
+    });
+
+    const filePath = `uploads/${Date.now()}-${file.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
+
+    if (uploadError) {
+      setError('Upload failed: ' + uploadError.message);
       setLoading(false);
       return;
     }
@@ -78,13 +85,19 @@ export default function MediaUploadPage() {
 
     const {
       data: { user },
+      error: userError,
     } = await supabase.auth.getUser();
 
-    if (!user) {
+    if (!user || userError) {
       setError('You must be logged in to save a link.');
       setLoading(false);
       return;
     }
+
+    await supabase.from('users').upsert({
+      id: user.id,
+      email: user.email,
+    });
 
     const { error } = await supabase.from('media_links').insert([
       {
@@ -153,4 +166,4 @@ export default function MediaUploadPage() {
       )}
     </div>
   );
-}
+} 
