@@ -1,83 +1,84 @@
 'use client';
-import React, { useState, useCallback } from 'react';
-import { createBrowserClient } from '@/lib/supabase';
 
-const supabase = createBrowserClient();
+import { useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
-const MediaUpload = () => {
-  const [uploading, setUploading] = useState(false);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function MediaUploadPage() {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const onFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null);
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFileUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
 
-    // Validate file type and size
-    if (!['audio/mpeg', 'audio/wav'].includes(file.type)) {
-      setError('Only MP3 or WAV files are supported.');
+    if (!file) {
+      setError('Please select a file.');
+      setLoading(false);
       return;
     }
-    if (file.size > 50 * 1024 * 1024) {
-      setError('File is too large (max 50MB).');
-      return;
-    }
 
-    setUploading(true);
     const filePath = `uploads/${Date.now()}-${file.name}`;
 
-    const { data: storageData, error: uploadError } = await supabase.storage
-      .from('media')
-      .upload(filePath, file, { upsert: true });
-
+    // Upload file to Supabase Storage
+    const { error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
     if (uploadError) {
       setError('Upload failed: ' + uploadError.message);
-      setUploading(false);
+      setLoading(false);
       return;
     }
 
-    const { data: urlData } = supabase.storage.from('media').getPublicUrl(filePath);
-    setFileUrl(urlData.publicUrl);
+    // Get user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-    // Get user ID
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (!user || userError) {
-      setError('Not authenticated or user error.');
-      setUploading(false);
+      setError('Auth error: user not found');
+      setLoading(false);
       return;
     }
 
-    // Insert media metadata into DB
+    // Insert into `media` table
     const { error: insertError } = await supabase.from('media').insert([
       {
         user_id: user.id,
-        file_path: filePath,
+        file_url: filePath,
         type: 'upload',
       },
     ]);
 
     if (insertError) {
-      setError('Database insert failed: ' + insertError.message);
-      setUploading(false);
+      setError('Insert failed: ' + insertError.message);
+      setLoading(false);
       return;
     }
 
-    setUploading(false);
-  }, []);
+    setSuccess('File uploaded and metadata saved!');
+    setLoading(false);
+  };
 
   return (
-    <div>
-      <input type="file" onChange={onFileChange} accept="audio/*" disabled={uploading} />
-      {uploading && <div>Uploading...</div>}
-      {error && <div className="text-red-600">{error}</div>}
-      {fileUrl && (
-        <div>
-          Uploaded: <a href={fileUrl} target="_blank" rel="noopener noreferrer">{fileUrl}</a>
-        </div>
-      )}
+    <div className="w-full max-w-md mx-auto mt-24 p-6 bg-white rounded-2xl shadow-2xl">
+      <h2 className="text-2xl font-bold mb-4 text-center">Upload Media</h2>
+      <form onSubmit={handleFileUpload} className="flex flex-col gap-4">
+        <Input
+          type="file"
+          accept="audio/*,video/*"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+        {error && <div className="text-red-600 text-sm">{error}</div>}
+        {success && <div className="text-green-600 text-sm">{success}</div>}
+        <Button type="submit" disabled={loading}>
+          {loading ? 'Uploading...' : 'Upload'}
+        </Button>
+      </form>
     </div>
   );
-};
-
-export default MediaUpload;
+}
