@@ -14,7 +14,7 @@ const MediaUpload = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // File validation
+    // Validate file type and size
     if (!['audio/mpeg', 'audio/wav'].includes(file.type)) {
       setError('Only MP3 or WAV files are supported.');
       return;
@@ -26,7 +26,8 @@ const MediaUpload = () => {
 
     setUploading(true);
     const filePath = `uploads/${Date.now()}-${file.name}`;
-    const { data, error: uploadError } = await supabase.storage
+
+    const { data: storageData, error: uploadError } = await supabase.storage
       .from('media')
       .upload(filePath, file, { upsert: true });
 
@@ -38,6 +39,30 @@ const MediaUpload = () => {
 
     const { data: urlData } = supabase.storage.from('media').getPublicUrl(filePath);
     setFileUrl(urlData.publicUrl);
+
+    // Get user ID
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (!user || userError) {
+      setError('Not authenticated or user error.');
+      setUploading(false);
+      return;
+    }
+
+    // Insert media metadata into DB
+    const { error: insertError } = await supabase.from('media').insert([
+      {
+        user_id: user.id,
+        file_path: filePath,
+        type: 'upload',
+      },
+    ]);
+
+    if (insertError) {
+      setError('Database insert failed: ' + insertError.message);
+      setUploading(false);
+      return;
+    }
+
     setUploading(false);
   }, []);
 
