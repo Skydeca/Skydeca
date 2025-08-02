@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { createBrowserClient } from '@/lib/supabase';
@@ -28,29 +26,7 @@ export function MediaUploadPage() {
       console.error('Fetch error:', error.message);
     } else {
       setMediaList(data);
-      fetchTranscripts(data);
     }
-  };
-
-  const fetchTranscripts = async (mediaItems: any[]) => {
-    const ids = mediaItems.map((m) => m.transcript_id).filter(Boolean);
-    if (!ids.length) return;
-
-    const { data, error } = await supabase
-      .from('transcripts')
-      .select('id, segments')
-      .in('id', ids);
-
-    if (error) {
-      console.error('Transcript fetch error:', error.message);
-      return;
-    }
-
-    const map: Record<string, string[]> = {};
-    data.forEach((t: any) => {
-      map[t.id] = t.segments || [];
-    });
-    setTranscripts(map);
   };
 
   useEffect(() => {
@@ -65,12 +41,12 @@ export function MediaUploadPage() {
     setUploading(true);
     setUploadProgress(0);
 
-    const { data, error } = await supabase.storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from('media')
       .upload(filePath, file, { upsert: true });
 
-    if (error) {
-      console.error('Upload error:', error.message);
+    if (uploadError) {
+      console.error('Upload error:', uploadError.message);
       setUploading(false);
       return;
     }
@@ -78,34 +54,33 @@ export function MediaUploadPage() {
     const { data: urlData } = supabase.storage.from('media').getPublicUrl(filePath);
     setFileUrl(urlData.publicUrl);
 
-    const { data: userSession } = await supabase.auth.getUser();
-    const userId = userSession?.user?.id;
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    const userId = userData?.user?.id;
 
-    console.log('User object before insert:', userSession);
-    console.log('Attempting insert with values:', {
-      user_id: userId,
-      file_url: filePath,
-      type: 'upload',
-    });
-
-    if (!userId) {
+    if (!userId || userError) {
       console.error('User not authenticated');
       setUploading(false);
       return;
     }
 
-    const insertRes = await supabase.from('media').insert({
-      user_id: userId,
-      file_url: filePath,
-      type: 'upload',
-      media_title: title,
-      created_on: new Date().toISOString(),
-    });
+    const mimeType = file.type;
+    const isVideo = mimeType.startsWith('video/');
+    const mediaType = isVideo ? 'video' : 'audio';
 
-    if (insertRes.error) {
-      console.error('Insert error:', insertRes.error.message);
+    const { error: insertError } = await supabase.from('media').insert([
+      {
+        user_id: userId,
+        file_url: urlData.publicUrl,
+        media_title: title,
+        media_type: mediaType,
+        created_on: new Date().toISOString(),
+      },
+    ]);
+
+    if (insertError) {
+      console.error('Insert error:', insertError.message);
     } else {
-      console.log('Inserted media record:', insertRes.data);
+      console.log('Inserted media record');
       fetchMedia();
     }
 
@@ -150,32 +125,18 @@ export function MediaUploadPage() {
             <li key={media.media_id} className="border p-4 rounded">
               <div className="font-medium">{media.media_title}</div>
               <div className="text-sm text-gray-600">{media.file_url}</div>
-              <div
-                id={`waveform-${media.media_id}`}
-                className="mt-2 w-full h-20 bg-gray-200"
-                ref={(node) => {
-                  if (node && !waveforms.current[media.media_id]) {
-                    const wavesurfer = WaveSurfer.create({
-                      container: `#waveform-${media.media_id}`,
-                      waveColor: '#ccc',
-                      progressColor: '#4f46e5',
-                      height: 80,
-                    });
-                    wavesurfer.load(media.file_url);
-                    waveforms.current[media.media_id] = wavesurfer;
-                  }
-                }}
-              />
-              {media.transcript_id && transcripts[media.transcript_id] && (
-                <div className="mt-3 text-sm bg-gray-100 p-2 rounded">
-                  <h3 className="font-semibold mb-1">Transcript</h3>
-                  <ul className="space-y-1 max-h-40 overflow-auto">
-                    {transcripts[media.transcript_id].map((segment, idx) => (
-                      <li key={idx}>{segment}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div id={`waveform-${media.media_id}`} className="mt-2 w-full h-20 bg-gray-200" ref={(node) => {
+                if (node && !waveforms.current[media.media_id]) {
+                  const wavesurfer = WaveSurfer.create({
+                    container: `#waveform-${media.media_id}`,
+                    waveColor: '#ccc',
+                    progressColor: '#4f46e5',
+                    height: 80,
+                  });
+                  wavesurfer.load(media.file_url);
+                  waveforms.current[media.media_id] = wavesurfer;
+                }
+              }} />
             </li>
           ))}
         </ul>
