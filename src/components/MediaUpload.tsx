@@ -44,6 +44,11 @@ export default function MediaUploadPage() {
       setLoading(false);
       return;
     }
+console.log('Trying insert with:', {
+  user_id: user.id,
+  file_url: filePath,
+  type: 'upload',
+});
 
     // Insert into `media` table
     const { error: insertError } = await supabase.from('media').insert([

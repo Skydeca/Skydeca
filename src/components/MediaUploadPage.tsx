@@ -21,9 +21,9 @@ export function MediaUploadPage() {
 
   const fetchMedia = async () => {
     const { data, error } = await supabase
-      .from('media_files')
+      .from('media')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_on', { ascending: false });
     if (error) {
       console.error('Fetch error:', error.message);
     } else {
@@ -78,8 +78,15 @@ export function MediaUploadPage() {
     const { data: urlData } = supabase.storage.from('media').getPublicUrl(filePath);
     setFileUrl(urlData.publicUrl);
 
-    const { data: user } = await supabase.auth.getUser();
-    const userId = user?.user?.id;
+    const { data: userSession } = await supabase.auth.getUser();
+    const userId = userSession?.user?.id;
+
+    console.log('User object before insert:', userSession);
+    console.log('Attempting insert with values:', {
+      user_id: userId,
+      file_url: filePath,
+      type: 'upload',
+    });
 
     if (!userId) {
       console.error('User not authenticated');
@@ -87,12 +94,12 @@ export function MediaUploadPage() {
       return;
     }
 
-    const insertRes = await supabase.from('media_files').insert({
+    const insertRes = await supabase.from('media').insert({
       user_id: userId,
-      file_url: urlData.publicUrl,
-      title,
-      duration: null,
-      transcript_id: null,
+      file_url: filePath,
+      type: 'upload',
+      media_title: title,
+      created_on: new Date().toISOString(),
     });
 
     if (insertRes.error) {
@@ -140,22 +147,22 @@ export function MediaUploadPage() {
         <h2 className="text-lg font-semibold mb-2">Uploaded Media</h2>
         <ul className="space-y-4">
           {mediaList.map((media) => (
-            <li key={media.id} className="border p-4 rounded">
-              <div className="font-medium">{media.title}</div>
+            <li key={media.media_id} className="border p-4 rounded">
+              <div className="font-medium">{media.media_title}</div>
               <div className="text-sm text-gray-600">{media.file_url}</div>
               <div
-                id={`waveform-${media.id}`}
+                id={`waveform-${media.media_id}`}
                 className="mt-2 w-full h-20 bg-gray-200"
                 ref={(node) => {
-                  if (node && !waveforms.current[media.id]) {
+                  if (node && !waveforms.current[media.media_id]) {
                     const wavesurfer = WaveSurfer.create({
-                      container: `#waveform-${media.id}`,
+                      container: `#waveform-${media.media_id}`,
                       waveColor: '#ccc',
                       progressColor: '#4f46e5',
                       height: 80,
                     });
                     wavesurfer.load(media.file_url);
-                    waveforms.current[media.id] = wavesurfer;
+                    waveforms.current[media.media_id] = wavesurfer;
                   }
                 }}
               />
