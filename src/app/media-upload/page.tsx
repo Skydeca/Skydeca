@@ -20,28 +20,41 @@ export default function MediaUploadPage() {
 
   useEffect(() => {
     const ensureUserRow = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      try {
+        console.log('[MediaUpload] Checking session...');
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('[MediaUpload] Session result:', session);
+
+        if (!session) {
+          router.push('/login');
+          return;
+        }
+
+        const { data: { user }, error } = await supabase.auth.getUser();
+        console.log('[MediaUpload] User result:', user);
+
+        if (error || !user) {
+          router.push('/login');
+          return;
+        }
+
+        const { error: insertError } = await supabase.from('users').upsert([
+          {
+            id: user.id,
+            email: user.email,
+            username: user.user_metadata?.username ?? null,
+          },
+        ]);
+
+        if (insertError) {
+          console.error('Failed to insert user row:', insertError.message);
+        }
+
+        setCheckingSession(false);
+      } catch (err) {
+        console.error('Auth check failed:', err);
         router.push('/login');
-        return;
       }
-
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error || !user) return;
-
-      const { error: insertError } = await supabase.from('users').upsert([
-        {
-          id: user.id,
-          email: user.email,
-          username: user.user_metadata?.username ?? null,
-        },
-      ]);
-
-      if (insertError) {
-        console.error('Failed to insert user row:', insertError.message);
-      }
-
-      setCheckingSession(false);
     };
 
     ensureUserRow();
