@@ -1,56 +1,52 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { useEffect, useState } from 'react';
+import { createBrowserClient } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Particles } from '@tsparticles/react';
-import { FcGoogle } from 'react-icons/fc';
 
-export default function AuthPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+export default function MediaUploadPage() {
+  const supabase = createBrowserClient();
+
+  const [file, setFile] = useState<File | null>(null);
+  const [externalUrl, setExternalUrl] = useState('');
+  const [mode, setMode] = useState<'upload' | 'link'>('upload');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const ensureUserRow = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) return;
+
+      const { error: insertError } = await supabase.from('users').upsert([
+        {
+          id: user.id,
+          email: user.email,
+          username: user.user_metadata?.username ?? null,
+        },
+      ]);
+
+      if (insertError) {
+        console.error('Failed to insert user row:', insertError.message);
+      }
+    };
+
+    ensureUserRow();
+  }, []);
+
+  const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccessMessage('');
     setLoading(true);
+    setError('');
+    setSuccess('');
 
-    if (!isLogin && password !== confirmPassword) {
-      setError('Passwords do not match.');
-      setLoading(false);
-      return;
-    }
-
-    const authFn = isLogin
-      ? supabase.auth.signInWithPassword
-      : supabase.auth.signUp;
-
-    const { data: authData, error: authError } = await authFn({
-      email,
-      password,
-      ...(isLogin
-        ? {}
-        : {
-            options: {
-              emailRedirectTo: `${location.origin}/login`,
-            },
-          }),
-    });
-
-    if (authError) {
-      setError(authError.message);
+    if (!file) {
+      setError('Please select a file.');
       setLoading(false);
       return;
     }
@@ -61,133 +57,126 @@ export default function AuthPage() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      setError('User not found after authentication.');
+      setError('Auth error: user not found');
       setLoading(false);
       return;
     }
 
-    if (!isLogin) {
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({ user_id: user.id, user_email: email });
-      if (insertError) {
-        setError('Signup succeeded, but user insert failed.');
-        setLoading(false);
-        return;
-      }
+    const filePath = `uploads/${Date.now()}-${file.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
+
+    if (uploadError) {
+      setError('Upload failed: ' + uploadError.message);
+      setLoading(false);
+      return;
     }
 
-    router.push('/media-upload');
+    const { error: insertError } = await supabase.from('media').insert([
+      {
+        user_id: user.id,
+        file_url: filePath,
+        type: 'upload',
+      },
+    ]);
+
+    if (insertError) {
+      setError('Insert failed: ' + insertError.message);
+      setLoading(false);
+      return;
+    }
+
+    setSuccess('File uploaded and metadata saved!');
+    setLoading(false);
   };
 
-  const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${location.origin}/media-upload`,
+  const handleExternalLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    if (!externalUrl) {
+      setError('Please paste a link.');
+      setLoading(false);
+      return;
+    }
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setError('You must be logged in to save a link.');
+      setLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.from('media_links').insert([
+      {
+        url: externalUrl,
+        user_id: user.id,
       },
-    });
+    ]);
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccess('Link saved!');
+      setExternalUrl('');
+    }
+    setLoading(false);
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-white relative overflow-hidden">
-      <Particles
-        id="tsparticles-auth"
-        className="absolute inset-0 z-0"
-        options={{
-          background: { color: { value: '#ffffff' } },
-          fullScreen: { enable: false },
-          particles: {
-            number: { value: 50 },
-            size: { value: 2 },
-            move: { enable: true, speed: 0.6 },
-            opacity: { value: 0.2 },
-            links: {
-              enable: true,
-              distance: 120,
-              color: '#c7d2fe',
-              opacity: 0.15,
-            },
-          },
-        }}
-      />
+    <div className="w-full max-w-md mx-auto mt-24 p-6 bg-white rounded-2xl shadow-2xl">
+      <h2 className="text-2xl font-bold mb-4 text-center">Add New Media</h2>
 
-      <motion.div
-        className="w-full max-w-sm mx-auto mt-32 p-8 bg-white relative z-10 rounded-2xl shadow-2xl backdrop-blur-md"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1 }}
-      >
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <h2 className="text-3xl font-extrabold text-center text-indigo-800 mb-2">
-            {isLogin ? 'Log In' : 'Sign Up'}
-          </h2>
+      <div className="flex justify-center mb-6">
+        <Button
+          variant={mode === 'upload' ? 'default' : 'ghost'}
+          onClick={() => setMode('upload')}
+          className="mr-2"
+        >
+          Upload
+        </Button>
+        <Button
+          variant={mode === 'link' ? 'default' : 'ghost'}
+          onClick={() => setMode('link')}
+        >
+          Link
+        </Button>
+      </div>
+
+      {mode === 'upload' ? (
+        <form onSubmit={handleFileUpload} className="flex flex-col gap-4">
           <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
+            type="file"
+            accept="audio/*,video/*"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
           />
-          <div className="relative">
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              value={password}
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div
-              className="absolute right-3 top-2.5 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </div>
-          </div>
-          {!isLogin && (
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              required
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          )}
-          {error && <div className="text-red-600 text-sm text-center">{error}</div>}
-          {successMessage && <div className="text-green-600 text-sm text-center">{successMessage}</div>}
-
-          <Button type="submit" disabled={loading} className="mt-2">
-            {loading ? 'Loading...' : isLogin ? 'Log In' : 'Sign Up'}
+          {error && <div className="text-red-600 text-sm">{error}</div>}
+          {success && <div className="text-green-600 text-sm">{success}</div>}
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Uploading...' : 'Upload'}
           </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGoogleLogin}
-            className="flex items-center gap-2 justify-center"
-          >
-            <FcGoogle size={18} />
-            Continue with Google
-          </Button>
-
-          <div className="text-center text-sm mt-3">
-            {isLogin ? (
-              <>
-                Don't have an account?{' '}
-                <span className="underline cursor-pointer text-indigo-600" onClick={() => setIsLogin(false)}>Sign Up</span>
-              </>
-            ) : (
-              <>
-                Already have an account?{' '}
-                <span className="underline cursor-pointer text-indigo-600" onClick={() => setIsLogin(true)}>Log In</span>
-              </>
-            )}
-          </div>
-          <div className="text-center text-xs mt-1">
-            <a href="#" className="underline cursor-pointer text-gray-400" onClick={() => alert('Password reset coming soon!')}>Forgot password?</a>
-          </div>
         </form>
-      </motion.div>
-    </main>
+      ) : (
+        <form onSubmit={handleExternalLink} className="flex flex-col gap-4">
+          <Input
+            type="url"
+            placeholder="Paste external media URL (YouTube, Spotify, etc.)"
+            value={externalUrl}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            required
+          />
+          {error && <div className="text-red-600 text-sm">{error}</div>}
+          {success && <div className="text-green-600 text-sm">{success}</div>}
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Saving...' : 'Save Link'}
+          </Button>
+        </form>
+      )}
+    </div>
   );
 }

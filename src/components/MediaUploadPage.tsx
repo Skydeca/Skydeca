@@ -1,3 +1,14 @@
+useEffect(() => {
+  const checkSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login';
+    }
+  };
+
+  checkSession();
+}, []);
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { createBrowserClient } from '@/lib/supabase';
