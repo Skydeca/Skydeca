@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function MediaUploadPage() {
   const supabase = createBrowserClient();
+  const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
   const [externalUrl, setExternalUrl] = useState('');
@@ -14,6 +16,38 @@ export default function MediaUploadPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  useEffect(() => {
+    const ensureUserRow = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/login');
+        return;
+      }
+
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) return;
+
+      const { error: insertError } = await supabase.from('users').upsert([
+        {
+          id: user.id,
+          email: user.email,
+          username: user.user_metadata?.username ?? null,
+        },
+      ]);
+
+      if (insertError) {
+        console.error('Failed to insert user row:', insertError.message);
+      }
+
+      setCheckingSession(false);
+    };
+
+    ensureUserRow();
+  }, [router, supabase]);
+
+  if (checkingSession) return null;
 
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
