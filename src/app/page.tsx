@@ -9,9 +9,8 @@ export default async function Home() {
 
   if (session) {
     redirect('/dashboard');
-  } else {
-    redirect('/login');
   }
 
-  return null; // fallback for TS
+  // Let it fall through to login if not authenticated
+  redirect('/login');
 }
