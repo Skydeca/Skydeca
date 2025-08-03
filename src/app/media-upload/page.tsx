@@ -32,17 +32,11 @@ export default function MediaUploadPage() {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (!user || userError) {
+    if (userError || !user) {
       setError('Auth error: user not found');
       setLoading(false);
       return;
     }
-
-    // Ensure user exists in users table
-    await supabase.from('users').upsert({
-      id: user.id,
-      email: user.email,
-    });
 
     const filePath = `uploads/${Date.now()}-${file.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
@@ -88,16 +82,11 @@ export default function MediaUploadPage() {
       error: userError,
     } = await supabase.auth.getUser();
 
-    if (!user || userError) {
+    if (userError || !user) {
       setError('You must be logged in to save a link.');
       setLoading(false);
       return;
     }
-
-    await supabase.from('users').upsert({
-      id: user.id,
-      email: user.email,
-    });
 
     const { error } = await supabase.from('media_links').insert([
       {
@@ -166,4 +155,4 @@ export default function MediaUploadPage() {
       )}
     </div>
   );
-} 
+}

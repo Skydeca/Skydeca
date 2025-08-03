@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Particles } from '@tsparticles/react';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function AuthPage() {
   const router = useRouter();
@@ -32,37 +33,43 @@ export default function AuthPage() {
       return;
     }
 
-    const method = isLogin
+    const authFn = isLogin
       ? supabase.auth.signInWithPassword
       : supabase.auth.signUp;
 
-    const { data, error } = isLogin
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: 'http://localhost:3000/login',
-          },
-        });
+    const { data: authData, error: authError } = await authFn({
+      email,
+      password,
+      ...(isLogin
+        ? {}
+        : {
+            options: {
+              emailRedirectTo: `${location.origin}/login`,
+            },
+          }),
+    });
 
-    if (error) {
-      setError(error.message);
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setError('User not found after authentication.');
       setLoading(false);
       return;
     }
 
     if (!isLogin) {
-      if (!data.session) {
-        setSuccessMessage('Check your email to confirm your account.');
-        setLoading(false);
-        return;
-      }
-
-      const userId = data.session.user.id;
       const { error: insertError } = await supabase
         .from('users')
-        .insert({ user_id: userId, email });
+        .insert({ user_id: user.id, user_email: email });
       if (insertError) {
         setError('Signup succeeded, but user insert failed.');
         setLoading(false);
@@ -70,12 +77,16 @@ export default function AuthPage() {
       }
     }
 
-    if (data.session?.user) {
-      router.push('/media-upload');
-    } else {
-      setError('Authentication succeeded but session is missing.');
-      setLoading(false);
-    }
+    router.push('/media-upload');
+  };
+
+  const handleGoogleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${location.origin}/media-upload`,
+      },
+    });
   };
 
   return (
@@ -147,6 +158,16 @@ export default function AuthPage() {
 
           <Button type="submit" disabled={loading} className="mt-2">
             {loading ? 'Loading...' : isLogin ? 'Log In' : 'Sign Up'}
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGoogleLogin}
+            className="flex items-center gap-2 justify-center"
+          >
+            <FcGoogle size={18} />
+            Continue with Google
           </Button>
 
           <div className="text-center text-sm mt-3">
