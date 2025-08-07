@@ -73,104 +73,95 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat relative"
-      style={{ backgroundImage: "url('/bg-login.jpg')" }}
-    >
-      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 text-center">
-        <h1 className="text-white text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[6vw] font-extrabold leading-none drop-shadow-xl">
-          Skydeca
-        </h1>
-        <p className="text-white text-lg sm:text-xl font-light tracking-[0.4em] uppercase mt-2">
-          Index the Infinite
-        </p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 bg-neutral-950">
+      <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-md p-8">
+        <h1 className="text-center text-3xl font-bold text-neutral-900 dark:text-white mb-2">Skydeca</h1>
+        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mb-6 tracking-widest uppercase">Index the Infinite</p>
 
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-sm bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl shadow-2xl animate-fade-in">
-          <h2 className="text-white text-3xl font-bold text-center mb-8 tracking-wide">
-            {mode === 'login' ? 'LOGIN' : mode === 'signup' ? 'REGISTER' : 'RESET PASSWORD'}
-          </h2>
+        <h2 className="text-2xl font-semibold text-center text-neutral-800 dark:text-white mb-6">
+          {mode === 'login' ? 'Login' : mode === 'signup' ? 'Register' : 'Reset Password'}
+        </h2>
 
-          <form
-            onSubmit={mode === 'login' ? handleLogin : mode === 'signup' ? handleSignup : handleResetPassword}
-            className="space-y-4"
-          >
+        <form
+          onSubmit={mode === 'login' ? handleLogin : mode === 'signup' ? handleSignup : handleResetPassword}
+          className="space-y-4"
+        >
+          <div className="relative">
+            <FaUser className="absolute top-3 left-3 text-neutral-500 dark:text-neutral-400" />
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="pl-10"
+              required
+            />
+          </div>
+
+          {(mode === 'login' || mode === 'signup') && (
             <div className="relative">
-              <FaUser className="absolute top-3 left-3 text-white opacity-80" />
+              <FaLock className="absolute top-3 left-3 text-neutral-500 dark:text-neutral-400" />
               <Input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 bg-white/30 text-white placeholder-white"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pl-10"
                 required
               />
             </div>
+          )}
 
-            {(mode === 'login' || mode === 'signup') && (
-              <div className="relative">
-                <FaLock className="absolute top-3 left-3 text-white opacity-80" />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 bg-white/30 text-white placeholder-white"
-                  required
-                />
-              </div>
-            )}
+          {mode === 'login' && (
+            <div className="flex justify-between text-xs text-neutral-600 dark:text-neutral-400">
+              <label className="flex items-center gap-1">
+                <input type="checkbox" className="accent-blue-600" /> Remember me
+              </label>
+              <button type="button" onClick={() => setMode('forgot')} className="hover:underline">
+                Forgot password?
+              </button>
+            </div>
+          )}
 
-            {mode === 'login' && (
-              <div className="flex justify-between text-white text-xs mt-1">
-                <label className="flex items-center gap-1">
-                  <input type="checkbox" className="accent-white" /> Remember me
-                </label>
-                <button type="button" onClick={() => setMode('forgot')} className="underline">Forgot password?</button>
-              </div>
-            )}
+          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
-            {error && <div className="text-red-400 text-sm text-center">{error}</div>}
-
-            <Button type="submit" disabled={loading} className="w-full bg-white text-blue-700 font-semibold hover:bg-gray-100">
-              {loading
-                ? mode === 'login'
-                  ? 'Logging in...'
-                  : mode === 'signup'
-                  ? 'Signing up...'
-                  : 'Sending...'
-                : mode === 'login'
-                ? 'Login'
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading
+              ? mode === 'login'
+                ? 'Logging in...'
                 : mode === 'signup'
-                ? 'Register'
-                : 'Send Email'}
+                ? 'Signing up...'
+                : 'Sending...'
+              : mode === 'login'
+              ? 'Login'
+              : mode === 'signup'
+              ? 'Register'
+              : 'Send Email'}
+          </Button>
+
+          {mode === 'login' && (
+            <Button type="button" variant="outline" onClick={handleGoogleLogin} className="w-full">
+              Continue with Google
             </Button>
+          )}
+        </form>
 
-            {mode === 'login' && (
-              <Button type="button" variant="outline" onClick={handleGoogleLogin} className="w-full">
-                Continue with Google
-              </Button>
-            )}
-          </form>
-
-          <div className="text-center text-white text-sm mt-6">
-            {mode === 'login' ? (
-              <>
-                Don’t have an account?{' '}
-                <button onClick={() => setMode('signup')} className="underline">
-                  Register
-                </button>
-              </>
-            ) : (
-              <>
-                Back to{' '}
-                <button onClick={() => setMode('login')} className="underline">
-                  Login
-                </button>
-              </>
-            )}
-          </div>
+        <div className="text-center text-sm text-neutral-600 dark:text-neutral-400 mt-6">
+          {mode === 'login' ? (
+            <>
+              Don’t have an account?{' '}
+              <button onClick={() => setMode('signup')} className="text-blue-600 hover:underline">
+                Register
+              </button>
+            </>
+          ) : (
+            <>
+              Back to{' '}
+              <button onClick={() => setMode('login')} className="text-blue-600 hover:underline">
+                Login
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
