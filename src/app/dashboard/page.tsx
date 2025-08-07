@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createBrowserClient } from '@/lib/supabase';
 
 const mockData = Array.from({ length: 8 }, (_, i) => ({
   id: i,
@@ -14,12 +14,13 @@ const mockData = Array.from({ length: 8 }, (_, i) => ({
 
 export default function DashboardPage() {
   const router = useRouter();
+  const supabase = createBrowserClient();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) router.push('/login');
     });
-  }, []);
+  }, [router]);
 
   return (
     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

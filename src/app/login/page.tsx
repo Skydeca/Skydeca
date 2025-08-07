@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createBrowserClient } from '@/lib/supabase';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createBrowserClient } from "@/lib/supabase";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { FaUser, FaLock } from "react-icons/fa";
 
 export default function LoginPage() {
   const supabase = createBrowserClient();
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('login');
 
@@ -28,7 +28,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
@@ -42,7 +42,7 @@ export default function LoginPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) {
       setError(error.message);
@@ -55,7 +55,7 @@ export default function LoginPage() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
     const { error } = await supabase.auth.resetPasswordForEmail(email);
     if (error) {
       setError(error.message);
@@ -73,12 +73,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-neutral-950">
-      <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-md p-8">
-        <h1 className="text-center text-3xl font-bold text-neutral-900 dark:text-white mb-2">Skydeca</h1>
-        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mb-6 tracking-widest uppercase">Index the Infinite</p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black to-neutral-900 px-4 text-white relative">
+      <div className="absolute top-10 text-center">
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-blue-500 drop-shadow-md">Skydeca</h1>
+        <p className="text-sm md:text-lg mt-2 text-neutral-300 uppercase tracking-widest">Index the Infinite</p>
+      </div>
 
-        <h2 className="text-2xl font-semibold text-center text-neutral-800 dark:text-white mb-6">
+      <div className="w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl p-8 mt-36">
+        <h2 className="text-2xl font-semibold text-center mb-6">
           {mode === 'login' ? 'Login' : mode === 'signup' ? 'Register' : 'Reset Password'}
         </h2>
 
@@ -87,7 +89,7 @@ export default function LoginPage() {
           className="space-y-4"
         >
           <div className="relative">
-            <FaUser className="absolute top-3 left-3 text-neutral-500 dark:text-neutral-400" />
+            <FaUser className="absolute top-3 left-3 text-neutral-500" />
             <Input
               type="email"
               placeholder="Email"
@@ -100,7 +102,7 @@ export default function LoginPage() {
 
           {(mode === 'login' || mode === 'signup') && (
             <div className="relative">
-              <FaLock className="absolute top-3 left-3 text-neutral-500 dark:text-neutral-400" />
+              <FaLock className="absolute top-3 left-3 text-neutral-500" />
               <Input
                 type="password"
                 placeholder="Password"
@@ -113,7 +115,7 @@ export default function LoginPage() {
           )}
 
           {mode === 'login' && (
-            <div className="flex justify-between text-xs text-neutral-600 dark:text-neutral-400">
+            <div className="flex justify-between text-xs text-neutral-400">
               <label className="flex items-center gap-1">
                 <input type="checkbox" className="accent-blue-600" /> Remember me
               </label>
@@ -146,18 +148,18 @@ export default function LoginPage() {
           )}
         </form>
 
-        <div className="text-center text-sm text-neutral-600 dark:text-neutral-400 mt-6">
+        <div className="text-center text-sm text-neutral-400 mt-6">
           {mode === 'login' ? (
             <>
               Don’t have an account?{' '}
-              <button onClick={() => setMode('signup')} className="text-blue-600 hover:underline">
+              <button onClick={() => setMode('signup')} className="text-blue-400 hover:underline">
                 Register
               </button>
             </>
           ) : (
             <>
               Back to{' '}
-              <button onClick={() => setMode('login')} className="text-blue-600 hover:underline">
+              <button onClick={() => setMode('login')} className="text-blue-400 hover:underline">
                 Login
               </button>
             </>
